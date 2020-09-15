@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {MainFrame} from './mainFrame.jsx'
+import {MainFrame} from './mainFrame'
 
 class Main extends React.Component {
 

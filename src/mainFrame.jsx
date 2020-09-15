@@ -122,9 +122,9 @@ const followLineData = [
 ];
 
 const rectangleGuideData = [
-  {x : 0, y : rectanglePoint.y},
-  {x : rectanglePoint.x, y : rectanglePoint.y},
-  {x : rectanglePoint.x, y : 0}
+  {x : 0 , y : 110.0},
+  {x : 35.16632097182531 , y : 110},
+  {x : 35.16632097182531 , y : -41.84020003045144}
 ];
 
 const boxplotData = [
@@ -205,7 +205,7 @@ class MainFrame extends React.Component {
           chartWidth="500" chartHeight="300"
           chartFontSize="15"
         //   minXAxes="0" maxXAxes="200"
-          minYAxes="-100" maxYAxes="1000"
+          // minYAxes="-40" maxYAxes="1000"
           xAxesName="싸이클" yAxesName="값"
           data={chartData(this.state)}
         />
