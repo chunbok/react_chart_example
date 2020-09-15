@@ -17,7 +17,6 @@ const chartData = (state) => {
   if(state.rectangleGuide) {
     returnData.datasets = returnData.datasets.concat(state.rectangleGuide.slice());
   }
-  returnData.labels=[1,2,3,'neg'];
   return returnData
 }
 

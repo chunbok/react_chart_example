@@ -41,6 +41,11 @@ class BubbleChart extends React.Component {
                 }
             ],
             options: {
+                title: {
+                    display: true,
+                    text: props.chartTitle,
+                    fontSize: 20
+                },
                 legend: {
                     display: false,
                 }, // 그래프 위 데이터 구분음각
@@ -121,7 +126,6 @@ class BubbleChart extends React.Component {
             width:this.props.chartWidth + "px"
             ,height:this.props.chartHeight + "px"
         }}>
-            <h2>{this.props.chartTitle}</h2>
             <Bubble data={this.props.data}
             options={this.state.options} plugins={this.state.plugins} />
         </div>
