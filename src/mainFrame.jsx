@@ -150,6 +150,7 @@ const exportImage = () => {
   element.href = bubbleChartImage;
   element.download = "image.jpg";
   element.click();
+  element.remove();
 };
 
 
