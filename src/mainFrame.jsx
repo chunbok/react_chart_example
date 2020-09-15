@@ -143,8 +143,21 @@ const boxplotData = [
   randomValues(100, 80, 100)
 ];
 
+var bubbleChartImage = "";
+
+const exportImage = () => {
+  var element = document.createElement("a");
+  element.href = bubbleChartImage;
+  element.download = "image.jpg";
+  element.click();
+};
+
 
 class MainFrame extends React.Component {
+
+  setImage(chartImage) {
+    bubbleChartImage = chartImage;
+  }
 
   constructor(props) {
     super();
@@ -152,8 +165,10 @@ class MainFrame extends React.Component {
       bubbleData: [
         {
           label: '분포통계',
-          backgroundColor: "#ADD8E6", //점 색깔
+          backgroundColor: "#000000", //점의 면 색깔
+          borderColor: "#000000", //점의 선 색깔
           type:"bubble",
+          pointStyle: "circle", //점의 형태
           data: mansData
           }
       ]
@@ -200,14 +215,16 @@ class MainFrame extends React.Component {
   render() {
     return (
       <div>
+        <button onClick={exportImage}>버블차트 저장</button>
         <BubleChart 
           chartTitle="Bubble Chart"
-          chartWidth="500" chartHeight="300"
+          chartWidth="1000" chartHeight="500"
           chartFontSize="15"
         //   minXAxes="0" maxXAxes="200"
           // minYAxes="-40" maxYAxes="1000"
           xAxesName="싸이클" yAxesName="값"
           data={chartData(this.state)}
+          imageObject={this.setImage}
         />
         <BoxplotChart
           chartTitle="BoxPlot Chart"

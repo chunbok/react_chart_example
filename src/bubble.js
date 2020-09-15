@@ -36,6 +36,7 @@ class BubbleChart extends React.Component {
                         doCalcNextLine(textInfo);
                         textInfo.fillText = "2번째 줄 채우기";            
                         fillTextAddLine(ctx, textInfo);
+                        props.imageObject(chartInstance.toBase64Image());
                     }
                 }
             ],
