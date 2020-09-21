@@ -5,6 +5,7 @@ import ScatterChart from './scatter';
 import ExampleChart from './exmaple';
 import BoxplotChart from  './boxplot';
 import randomValues from './randomValueGenerator';
+import Modal from './modal';
 
 const chartData = (state) => {
   var returnData = {datasets:[]}
@@ -128,18 +129,96 @@ const rectangleGuideData = [
 
 const boxplotData = [
   {
-      min: 1,
+      min: 3,
       q1: 11,
       median: 30,
       q3: 41,
-      max: 70
+      max: 70,
+      outliers: [
+        {
+          params: {}
+          , value: 1
+        }
+        ,{
+          params: {}
+          , value: 68
+        }
+        ,{
+          params: {}
+          , value: 70
+        }
+        ,{
+          params: {}
+          , value: 73
+        }
+        ,{
+          params: {}
+          , value: 80
+        }
+      ]
   },
-  randomValues(100, 0, 20),
-  randomValues(100, 20, 70),
-  randomValues(100, 60, 100),
-  randomValues(40, 50, 100),
-  randomValues(100, 60, 120),
-  randomValues(100, 80, 100)
+  {
+    min: 1007.25
+    ,q1: 1182.00
+    ,median: 1252.00
+    ,q3: 1298.50
+    ,max: 1473.25
+    ,outliers: [
+      {
+        params: {
+          tempKey: 11
+        }
+        , value: 0.0
+      },
+      {
+        params: {
+          tempKey: 12
+        }
+        , value: 0.0
+      },
+      {
+        params: {
+          tempKey: 13
+        }
+        , value: 595.0
+      },
+      {
+        params: {
+          tempKey: 14
+        }
+        , value: 684.0
+      },
+      {
+        params: {
+          tempKey: 15
+        }
+        , value: 736.0
+      },
+      {
+        params: {
+          tempKey: 16
+        }
+        , value: 752.0
+      },
+      {
+        params: {
+          tempKey: 17
+        }
+        , value: 846.0
+      },
+      {
+        params: {
+          tempKey: 18
+        }
+        , value: 933.0
+      },
+      {
+        params: {
+          tempKey: 19
+        }
+        , value: 957.0
+      }]
+  }
 ];
 
 var bubbleChartImage = "";
@@ -152,11 +231,18 @@ const exportImage = () => {
   element.remove();
 };
 
-
 class MainFrame extends React.Component {
 
   setImage(chartImage) {
     bubbleChartImage = chartImage;
+  }
+
+  openModal = () => {
+    this.setState({ isModalOpen: true });
+  }
+  
+  closeModal = () => {
+    this.setState({ isModalOpen: false }); 
   }
 
   constructor(props) {
@@ -202,6 +288,7 @@ class MainFrame extends React.Component {
         labels: Array.from({length: boxplotData.length}, (v, i) => i + 1),
         datasets: [{
             label: '싸이클당 통계',
+            outlierColor: '#DD604B', // 아웃라이어 색깔
             backgroundColor: '#DD604B',
             borderColor: '#DD604B',
             borderWidth: 1,
@@ -210,12 +297,15 @@ class MainFrame extends React.Component {
             data: boxplotData
         }]
       }
+      ,isModalOpen: false
     }
   }
+
   render() {
     return (
       <div>
         <button onClick={exportImage}>버블차트 저장</button>
+        <button onClick={this.openModal}>모달오픈</button>
         <BubleChart 
           chartTitle="Bubble Chart"
           chartWidth="1000" chartHeight="500"
@@ -228,12 +318,13 @@ class MainFrame extends React.Component {
         />
         <BoxplotChart
           chartTitle="BoxPlot Chart"
-          chartWidth="500" chartHeight="300"
-          minXAxes="0" maxXAxes="200"
-          minYAxes="0" maxYAxes="200"
+          chartWidth="1000" chartHeight="500"
+          // minXAxes="0" maxXAxes="200"
+          // minYAxes="0" maxYAxes="2000"
           xAxesName="싸이클" yAxesName="횟수"
           data={this.state.boxplotData}
         />
+      <Modal isOpen={this.state.isModalOpen} close={this.closeModal} imageObject={bubbleChartImage} setImage={this.setImage} />
       </div>
     );
   }

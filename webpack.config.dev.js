@@ -18,6 +18,17 @@ module.exports = {
             loader: 'babel-loader',				// babel loader가 파이프를 통해 js 코드를 불러옴
             test: /\.(js$|jsx$)/,                          // .js, .jsx로 끝나는 babel이 컴파일하게 할 모든 파일
             exclude: /node_module/                 // node module 폴더는 babel 컴파일에서 제외
+          },
+          {
+            test: /\.(s[ac]ss$|css$)/i,
+            use: [
+              // Creates `style` nodes from JS strings
+              'style-loader',
+              // Translates CSS into CommonJS
+              'css-loader',
+              // Compiles Sass to CSS
+              'sass-loader',
+            ],
           }
       ]
   }
