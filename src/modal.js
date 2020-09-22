@@ -9,6 +9,10 @@ const myTheme = {
     'header.border': '0px'
 };
 
+const removeHeader = () => {
+  document.querySelector('.tui-image-editor-header').remove();
+}
+
 class Modal extends React.Component {
 
     returnDrawnImage = () => {
@@ -20,7 +24,12 @@ class Modal extends React.Component {
 
     constructor(props) {
         super();
-        this.imageEditor = null;
+    }
+
+    componentDidUpdate = () => {
+      if(this.imageEditor) {
+        removeHeader();
+      }
     }
 
     render() {
@@ -42,7 +51,7 @@ class Modal extends React.Component {
                   }}
                   includeUI={{
                                 loadImage: {
-                                    path: this.props.imageObject,
+                                    path: this.props.bubbleChartImage,
                                     name: 'loadImage'
                                 },
                                 theme: myTheme,

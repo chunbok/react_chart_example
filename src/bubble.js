@@ -20,7 +20,7 @@ class BubbleChart extends React.Component {
         this.state ={
             plugins: [
                 {
-                    afterDraw: (chartInstance, easing) => {
+                    afterRender: (chartInstance, easing) => {
                         // 현재 차트 컨텍스트 획득
                         const ctx = chartInstance.chart.ctx;
             
@@ -36,7 +36,7 @@ class BubbleChart extends React.Component {
                         doCalcNextLine(textInfo);
                         textInfo.fillText = "2번째 줄 채우기";            
                         fillTextAddLine(ctx, textInfo);
-                        props.imageObject(chartInstance.toBase64Image());
+                        props.setImage(chartInstance.toBase64Image());
                     }
                 }
             ],
@@ -134,8 +134,19 @@ class BubbleChart extends React.Component {
             width:this.props.chartWidth + "px"
             ,height:this.props.chartHeight + "px"
         }}>
-            <Bubble data={this.props.data}
-            options={this.state.options} plugins={this.state.plugins} />
+            {/* <Bubble data={this.props.data}
+                options={this.state.options} plugins={this.state.plugins} /> */}
+            {
+                this.props.bubbleChartImage == null?
+                <Bubble data={this.props.data}
+                options={this.state.options} plugins={this.state.plugins} />
+                :
+                <img style={{
+                    width:this.props.chartWidth + "px"
+                    ,height:this.props.chartHeight + "px"
+                }} 
+                src={this.props.bubbleChartImage} />
+            }
         </div>
         );
     }

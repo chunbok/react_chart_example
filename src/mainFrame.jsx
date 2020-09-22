@@ -33,8 +33,6 @@ const getValueExternal = (axesKey, minmax, targetObjectArray) => {
     return returnValue;
 }
 
-var rectanglePoint = {x:40, y:100}
-
 const mansData = [
     {x:1, y: 14.48713485},
     {x:2, y: 1.624007036},
@@ -195,21 +193,20 @@ const boxplotData = [
   }
 ];
 
-var bubbleChartImage = "";
-var drawnBubbleChartImage = "";
-
-const exportImage = () => {
-  var element = document.createElement("a");
-  element.href = bubbleChartImage;
-  element.download = "image.jpg";
-  element.click();
-  element.remove();
-};
-
 class MainFrame extends React.Component {
 
-  setImage(chartImage) {
-    bubbleChartImage = chartImage;
+  exportImage = () => {
+    var element = document.createElement("a");
+    element.href = this.state.bubbleChartImage;
+    element.download = "image.jpg";
+    element.click();
+    element.remove();
+  };
+
+  setImage = (chartImage) => {
+    this.setState({
+      bubbleChartImage : chartImage
+    });
   }
 
   openModal = () => {
@@ -281,7 +278,7 @@ class MainFrame extends React.Component {
   render() {
     return (
       <div>
-        <button onClick={exportImage}>버블차트 저장</button>
+        <button onClick={this.exportImage}>버블차트 저장</button>
         <button onClick={this.openModal}>모달오픈</button>
         <BubleChart 
           chartTitle="Bubble Chart"
@@ -291,7 +288,8 @@ class MainFrame extends React.Component {
           // minYAxes="-40" maxYAxes="1000"
           xAxesName="싸이클" yAxesName="값"
           data={chartData(this.state)}
-          imageObject={this.setImage}
+          setImage={this.setImage}
+          bubbleChartImage={this.state.bubbleChartImage}
         />
         <BoxplotChart
           chartTitle="BoxPlot Chart"
@@ -304,7 +302,7 @@ class MainFrame extends React.Component {
         <Modal 
           openFlag={this.state.isModalOpen}
           close={this.closeModal} 
-          imageObject={bubbleChartImage} 
+          bubbleChartImage={this.state.bubbleChartImage} 
           setImage={this.setImage} 
           />
       </div>
