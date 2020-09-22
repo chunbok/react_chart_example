@@ -102,16 +102,24 @@ class BubbleChart extends React.Component {
             }
         }
 
-        if(props.minXAxes && props.maxXAxes) {
+        if(props.minXAxes) {
             this.state.options.scales.xAxes[0].ticks = {
                 min: props.minXAxes/1, //넘어온값이 String이므로 강제로 numberic으로 변경,
+            }
+        }
+        if(props.maxXAxes) {
+            this.state.options.scales.xAxes[0].ticks = {
                 max: props.maxXAxes/1 //넘어온값이 String이므로 강제로 numberic으로 변경
             }
         }
 
-        if(props.minYAxes && props.maxYAxes) {
+        if(props.minYAxes) {
             this.state.options.scales.yAxes[0].ticks = {
                 min: props.minYAxes/1, //넘어온값이 String이므로 강제로 numberic으로 변경
+            }
+        }
+        if(props.maxYAxes) {
+            this.state.options.scales.yAxes[0].ticks = {
                 max: props.maxYAxes/1 //넘어온값이 String이므로 강제로 numberic으로 변경
             }
         }

@@ -129,99 +129,74 @@ const rectangleGuideData = [
 
 const boxplotData = [
   {
-      min: 3,
-      q1: 11,
-      median: 30,
-      q3: 41,
-      max: 70,
+      min: 957.0,
+      q1: 1182.0,
+      median: 1252.0,
+      q3: 1298.5,
+      max: 1422.0,
       outliers: [
         {
           params: {}
-          , value: 1
+          , value: 0.0
         }
         ,{
           params: {}
-          , value: 68
+          , value: 0.0
         }
         ,{
           params: {}
-          , value: 70
+          , value: 595.0
         }
         ,{
           params: {}
-          , value: 73
+          , value: 684.0
         }
         ,{
           params: {}
-          , value: 80
+          , value: 736.0
+        }
+        ,{
+          params: {}
+          , value: 846.0
+        }
+        ,{
+          params: {}
+          , value: 933.0
         }
       ]
   },
   {
-    min: 1007.25
-    ,q1: 1182.00
-    ,median: 1252.00
-    ,q3: 1298.50
-    ,max: 1473.25
+    min: 1089.0
+    ,q1: 1222.0
+    ,median: 1264.0
+    ,q3: 1301.0
+    ,max: 1422.0
     ,outliers: [
       {
         params: {
           tempKey: 11
         }
-        , value: 0.0
+        , value: 957.0
       },
       {
         params: {
           tempKey: 12
         }
-        , value: 0.0
-      },
-      {
-        params: {
-          tempKey: 13
-        }
-        , value: 595.0
-      },
-      {
-        params: {
-          tempKey: 14
-        }
-        , value: 684.0
-      },
-      {
-        params: {
-          tempKey: 15
-        }
-        , value: 736.0
-      },
-      {
-        params: {
-          tempKey: 16
-        }
-        , value: 752.0
-      },
-      {
-        params: {
-          tempKey: 17
-        }
-        , value: 846.0
-      },
-      {
-        params: {
-          tempKey: 18
-        }
-        , value: 933.0
-      },
-      {
-        params: {
-          tempKey: 19
-        }
-        , value: 957.0
+        , value: 1044.0
       }]
+  },
+  {
+    min: 1089.0
+    ,q1: 1227.0
+    ,median: 1266.0
+    ,q3: 1302.0
+    ,max: 1422.0
+    ,outliers: []
   }
 ];
 
 var bubbleChartImage = "";
+var drawnBubbleChartImage = "";
 
 const exportImage = () => {
   var element = document.createElement("a");
@@ -241,8 +216,10 @@ class MainFrame extends React.Component {
     this.setState({ isModalOpen: true });
   }
   
-  closeModal = () => {
-    this.setState({ isModalOpen: false }); 
+  closeModal = (drawnImage) => {
+    this.setState({ isModalOpen: false });
+    // bubbleChartImage = drawnImage;
+    // drawnBubbleChartImage = "";
   }
 
   constructor(props) {
@@ -289,7 +266,7 @@ class MainFrame extends React.Component {
         datasets: [{
             label: '싸이클당 통계',
             outlierColor: '#DD604B', // 아웃라이어 색깔
-            backgroundColor: '#DD604B',
+            backgroundColor: '#DF8D80',
             borderColor: '#DD604B',
             borderWidth: 1,
             padding: 10,
@@ -320,11 +297,16 @@ class MainFrame extends React.Component {
           chartTitle="BoxPlot Chart"
           chartWidth="1000" chartHeight="500"
           // minXAxes="0" maxXAxes="200"
-          // minYAxes="0" maxYAxes="2000"
+          // minYAxes="0"  // maxYAxes="2000"
           xAxesName="싸이클" yAxesName="횟수"
           data={this.state.boxplotData}
         />
-      <Modal isOpen={this.state.isModalOpen} close={this.closeModal} imageObject={bubbleChartImage} setImage={this.setImage} />
+        <Modal 
+          openFlag={this.state.isModalOpen}
+          close={this.closeModal} 
+          imageObject={bubbleChartImage} 
+          setImage={this.setImage} 
+          />
       </div>
     );
   }
