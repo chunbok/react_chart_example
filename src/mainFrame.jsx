@@ -1,11 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import BubleChart from './bubble';
-import ScatterChart from './scatter';
-import ExampleChart from './exmaple';
-import BoxplotChart from  './boxplot';
-import randomValues from './randomValueGenerator';
-import Modal from './modal';
+import BubleChart from './bubble/bubble';
+import BoxplotChart from  './boxplot/boxplot';
+import Modal from './modal/modal';
 
 const chartData = (state) => {
   var returnData = {datasets:[]}
