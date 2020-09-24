@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import BubleChart from './bubble/bubble';
+import ImageBaseBubbleChart from './bubble/imageBaseBubble';
+import CanvasBaseBubbleChart from './bubble/canvasBaseBubble';
+import WrappingBoxPlotChart from './boxplot/wrappingBoxplot';
 import BoxplotChart from  './boxplot/boxplot';
 import Modal from './modal/modal';
 
@@ -227,7 +229,7 @@ class MainFrame extends React.Component {
           type:"bubble",
           pointStyle: "circle", //점의 형태
           data: mansData
-          }
+        }
       ]
       ,followLine: [
         {
@@ -275,20 +277,25 @@ class MainFrame extends React.Component {
   render() {
     return (
       <div>
-        <button onClick={this.exportImage}>버블차트 저장</button>
-        <button onClick={this.openModal}>모달오픈</button>
-        <BubleChart 
-          chartTitle="Bubble Chart"
+        <CanvasBaseBubbleChart 
+          chartTitle="Bubble Chart(to Canvas)"
+          chartWidth="1000" chartHeight="500"
+          chartFontSize="15"
+          //minXAxes="0" maxXAxes="200"
+          // minYAxes="-40" maxYAxes="1000"
+          xAxesName="싸이클" yAxesName="값"
+          data={chartData(this.state)}
+        />
+        <ImageBaseBubbleChart 
+          chartTitle="Bubble Chart(to Image)"
           chartWidth="1000" chartHeight="500"
           chartFontSize="15"
         //   minXAxes="0" maxXAxes="200"
           // minYAxes="-40" maxYAxes="1000"
           xAxesName="싸이클" yAxesName="값"
           data={chartData(this.state)}
-          setImage={this.setImage}
-          bubbleChartImage={this.state.bubbleChartImage}
         />
-        <BoxplotChart
+        <WrappingBoxPlotChart
           chartTitle="BoxPlot Chart"
           chartWidth="1000" chartHeight="500"
           // minXAxes="0" maxXAxes="200"
@@ -296,12 +303,6 @@ class MainFrame extends React.Component {
           xAxesName="싸이클" yAxesName="횟수"
           data={this.state.boxplotData}
         />
-        <Modal 
-          openFlag={this.state.isModalOpen}
-          close={this.closeModal} 
-          bubbleChartImage={this.state.bubbleChartImage} 
-          setImage={this.setImage} 
-          />
       </div>
     );
   }

@@ -1,5 +1,6 @@
 import React from 'react';
 import {Bubble} from 'react-chartjs-2';
+import Modal from '../modal/modal';
 
 const doCalcNextLine = (textInfo) => {
     textInfo.fontPositionY = textInfo.fontPositionY + (textInfo.fontPixel);
@@ -14,6 +15,28 @@ const fillTextAddLine = (ctx, textInfo) => {
 }
 
 class BubbleChart extends React.Component {
+
+    exportImage = () => {
+        var element = document.createElement("a");
+        element.href = this.state.bubbleChartImage;
+        element.download = "image.jpg";
+        element.click();
+        element.remove();
+    };
+
+    setImage = (chartImage) => {
+        this.setState({
+            bubbleChartImage : chartImage
+        });
+    }
+
+    openModal = () => {
+        this.setState({ isModalOpen: true });
+    }
+
+    closeModal = (drawnImage) => {
+        this.setState({ isModalOpen: false });
+    }
 
     constructor(props) {
         super();
@@ -36,7 +59,7 @@ class BubbleChart extends React.Component {
                         doCalcNextLine(textInfo);
                         textInfo.fillText = "2번째 줄 채우기";            
                         fillTextAddLine(ctx, textInfo);
-                        props.setImage(chartInstance.toBase64Image());
+                        this.setImage(chartInstance.toBase64Image());
                     }
                 }
             ],
@@ -129,25 +152,34 @@ class BubbleChart extends React.Component {
     
 
     render() {
+        const {chartWidth, chartHeight, ...prorps} = this.props;
         return (
-        <div style={{
-            width:this.props.chartWidth + "px"
-            ,height:this.props.chartHeight + "px"
-        }}>
-            {/* <Bubble data={this.props.data}
-                options={this.state.options} plugins={this.state.plugins} /> */}
-            {
-                this.props.bubbleChartImage == null?
-                <Bubble data={this.props.data}
-                options={this.state.options} plugins={this.state.plugins} />
-                :
-                <img style={{
-                    width:this.props.chartWidth + "px"
-                    ,height:this.props.chartHeight + "px"
-                }} 
-                src={this.props.bubbleChartImage} />
-            }
-        </div>
+            <div>
+                <button onClick={this.exportImage}>버블차트 저장</button>
+                <button onClick={this.openModal}>모달오픈</button>
+                <div style={{
+                    width:chartWidth + "px"
+                    ,height:chartHeight + "px"
+                }}>
+                    {
+                        this.state.bubbleChartImage == null?
+                        <Bubble data={this.props.data}
+                        options={this.state.options} plugins={this.state.plugins} />
+                        :
+                        <img style={{
+                            width:chartWidth + "px"
+                            ,height:chartHeight + "px"
+                        }} 
+                        src={this.state.bubbleChartImage} />
+                    }
+                    <Modal 
+                        openFlag={this.state.isModalOpen}
+                        close={this.closeModal} 
+                        bubbleChartImage={this.state.bubbleChartImage} 
+                        setImage={this.setImage} 
+                    />
+                </div>
+            </div>
         );
     }
 }
