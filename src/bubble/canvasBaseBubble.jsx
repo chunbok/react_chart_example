@@ -94,10 +94,11 @@ class CanvasBaseBubbleChart extends React.Component {
                     afterDraw: (chartInstance, easing) => {
                         // 현재 차트 컨텍스트 획득
                         const ctx = chartInstance.chart.ctx;
+                        const chartArea = chartInstance.chartArea;
             
                         var textInfo = {};
-                        textInfo.fontPositionX = props.chartWidth/7;
-                        textInfo.fontPositionY = props.chartHeight/10;
+                        textInfo.fontPositionX = chartArea.left;
+                        textInfo.fontPositionY = chartArea.top;
                         textInfo.fontPixel = props.chartFontSize/1; //넘어온값이 String이므로 강제로 numberic으로 변경
                         textInfo.fontStyle = "Georgia";
                         textInfo.fontColor = "black";

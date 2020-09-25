@@ -397,6 +397,7 @@ class MainFrame extends React.Component {
           backgroundColor: "#000000", //점의 면 색깔
           borderColor: "#000000", //점의 선 색깔
           type:"bubble",
+          radius:1, //데이터 원 크기(0은 제거)
           pointStyle: "circle", //점의 형태
           data: mansData
         }
@@ -406,7 +407,7 @@ class MainFrame extends React.Component {
           label: '추적 선' + 0,
           type:"scatter",
           borderColor: "#9F999A", //선색깔
-          borderWidth: 2, //선 두께
+          borderWidth: 1, //선 두께
           radius:0, //데이터 원 크기(0은 제거)
           fill:false, // 넓이 채우기
           showLine:true, // 선그리기 여부
@@ -416,7 +417,7 @@ class MainFrame extends React.Component {
           label: '추적 선' + 1,
           type:"scatter",
           borderColor: "#9F99AA", //선색깔
-          borderWidth: 2, //선 두께
+          borderWidth: 1, //선 두께
           radius:0, //데이터 원 크기(0은 제거)
           fill:false, // 넓이 채우기
           showLine:true, // 선그리기 여부
@@ -426,7 +427,7 @@ class MainFrame extends React.Component {
           label: '추적 선' + 2,
           type:"scatter",
           borderColor: "#9F99BA", //선색깔
-          borderWidth: 2, //선 두께
+          borderWidth: 1, //선 두께
           radius:0, //데이터 원 크기(0은 제거)
           fill:false, // 넓이 채우기
           showLine:true, // 선그리기 여부
@@ -436,7 +437,7 @@ class MainFrame extends React.Component {
           label: '추적 선' + 3,
           type:"scatter",
           borderColor: "#9F99CA", //선색깔
-          borderWidth: 2, //선 두께
+          borderWidth: 1, //선 두께
           radius:0, //데이터 원 크기(0은 제거)
           fill:false, // 넓이 채우기
           showLine:true, // 선그리기 여부
@@ -458,7 +459,7 @@ class MainFrame extends React.Component {
           label: '범위 선?',
           type:"scatter",
           borderColor: "#CAA712", //선색깔
-          borderWidth: 2, //선 두께
+          borderWidth: 1, //선 두께
           lineTension:0, // 선 곡선정도
           radius:0, //데이터 원 크기(0은 제거)
           fill:false, // 넓이 채우기
@@ -489,10 +490,10 @@ class MainFrame extends React.Component {
       <div>
         <CanvasBaseBubbleChart 
           chartTitle="Bubble Chart(to Canvas)"
-          chartWidth="1000" chartHeight="500"
-          chartFontSize="15"
+          chartWidth="290" chartHeight="180"
+          chartFontSize="8"
           //minXAxes="0" maxXAxes="200"
-          // minYAxes="-40" maxYAxes="1000"
+          minYAxes="-100" maxYAxes="1000"
           xAxesName="싸이클" yAxesName="값"
           data={chartData(this.state)}
         />
