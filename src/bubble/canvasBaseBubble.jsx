@@ -38,6 +38,54 @@ class CanvasBaseBubbleChart extends React.Component {
         this.setState({ isModalOpen: false });
     }
 
+    hideLineAll = () => {
+        var chartThis = this.state.bubbleChartThis.chartInstance;
+        const datas =this.props.data.datasets.filter(item => {
+            if(item.type == 'scatter' && item.lineTension != 0) {
+                return item;
+            }
+        });
+        for(const [key, value] of Object.entries(datas)) {
+            value._meta[0].hidden = this.checkToggle(value._meta[0]);
+        }
+        chartThis.update();
+    }
+
+    hideLineEndPoint = () => {
+        var chartThis = this.state.bubbleChartThis.chartInstance;
+        const datas =this.props.data.datasets.filter(item => {
+            if(item.type == 'scatter' && item.lineTension != 0) {
+                return item;
+            }
+        });
+        for(const [key, value] of Object.entries(datas)) {
+            if(key == 0 || key == datas.length - 1) {
+                value._meta[0].hidden = this.checkToggle(value._meta[0]);
+            }
+        }
+        chartThis.update();
+    }
+
+    hideLineMiddle = () => {
+        var chartThis = this.state.bubbleChartThis.chartInstance;
+        const datas =this.props.data.datasets.filter(item => {
+            if(item.type == 'scatter' && item.lineTension != 0) {
+                return item;
+            }
+        });
+        for(const [key, value] of Object.entries(datas)) {
+            if(key != 0 && key != datas.length - 1) {
+                value._meta[0].hidden = this.checkToggle(value._meta[0]);
+            }
+        }
+        chartThis.update();
+    }
+
+    checkToggle = (toggleItem) => {
+        return toggleItem.hidden? 
+            false: true;
+    }
+
     constructor(props) {
         super();
         this.state ={
@@ -167,7 +215,11 @@ class CanvasBaseBubbleChart extends React.Component {
                     width:chartWidth + "px"
                     ,height:chartHeight + "px"
                 }}>
-                    <Bubble data={this.props.data}
+                    <Bubble 
+                        ref={ref => {
+                            this.state.bubbleChartThis = ref;
+                        }}
+                        data={this.props.data}
                         options={this.state.options} plugins={this.state.plugins} />
                     <Modal 
                         openFlag={this.state.isModalOpen}
@@ -176,6 +228,9 @@ class CanvasBaseBubbleChart extends React.Component {
                         setImage={this.setImage} 
                     />
                 </div>
+                <button onClick={this.hideLineAll}>모든선토글</button>
+                <button onClick={this.hideLineEndPoint}>끝선토글</button>
+                <button onClick={this.hideLineMiddle}>중간선토글</button>
         </div>
         );
     }
