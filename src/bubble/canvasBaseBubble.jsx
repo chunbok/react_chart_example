@@ -150,14 +150,30 @@ class CanvasBaseBubbleChart extends React.Component {
                             display: true,
                             labelString: props.xAxesName
                         },
-                        display: true
+                        display: true,
+                        afterTickToLabelConversion: (scale) => {
+                            var ticks = scale.ticks;
+                            for(var key in ticks) {
+                                if(key%2 != 0) {
+                                    ticks[key] = '';
+                                }
+                            }
+                        }
                     }],
                     yAxes: [{
                         scaleLabel: {
                             display: true,
                             labelString: props.yAxesName
                         },
-                        display: true
+                        display: true,
+                        afterTickToLabelConversion: (scale) => {
+                            var ticks = scale.ticks;
+                            for(var key in ticks) {
+                                if(key%2 != 0) {
+                                    ticks[key] = '';
+                                }
+                            }
+                        }
                     }] 
                 },
                 onClick: (event, activeElements) => {
