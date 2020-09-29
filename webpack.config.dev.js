@@ -29,11 +29,17 @@ module.exports = {
               // Compiles Sass to CSS
               'sass-loader',
             ],
+          },
+          {
+            test: /\.(tsx|ts|jsx)?$/,
+            use: [
+              'ts-loader'
+            ]
           }
       ]
   }
   , resolve: {
-    extensions: ['.js', '.jsx']
+    extensions: ['.js', '.jsx', 'ts']
   } // webpack이 확장자 없이 해석할수 있도록 확장자 등록
   ,plugins: [
     new HtmlWebpackPlugin(

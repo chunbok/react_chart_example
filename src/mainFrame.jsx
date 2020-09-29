@@ -1,10 +1,11 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import ImageBaseBubbleChart from './bubble/imageBaseBubble';
 import CanvasBaseBubbleChart from './bubble/canvasBaseBubble';
 import WrappingBoxPlotChart from './boxplot/wrappingBoxplot';
-import BoxplotChart from  './boxplot/boxplot';
-import Modal from './modal/modal';
+// import CoordinateData from './observers/CoordinateDatat'
+import { inject, observer } from 'mobx-react';
+import { autobind } from 'core-decorators';
+
 
 const chartData = (state) => {
   var returnData = {datasets:[]}
@@ -18,18 +19,6 @@ const chartData = (state) => {
     returnData.datasets = returnData.datasets.concat(state.rectangleGuide.slice());
   }
   return returnData
-}
-
-const getValueExternal = (axesKey, minmax, targetObjectArray) => {
-    var returnValue = 0;
-    targetObjectArray.forEach((element) => {
-        if(minmax === 'min') {
-            returnValue = element[axesKey]<returnValue?element[axesKey]:returnValue
-        }else if(minmax ==='max') {
-            returnValue = element[axesKey]>returnValue?element[axesKey]:returnValue
-        }
-    });
-    return returnValue;
 }
 
 const mansData = [
@@ -362,6 +351,9 @@ const boxplotData = [
   }
 ];
 
+// @inject("coordinateData")
+// @autobind
+// @observer
 class MainFrame extends React.Component {
 
   exportImage = () => {
@@ -389,6 +381,7 @@ class MainFrame extends React.Component {
   }
 
   constructor(props) {
+    var {coordinateData, ...props} = props; 
     super();
     this.state = {
       bubbleData: [
@@ -483,6 +476,10 @@ class MainFrame extends React.Component {
       }
       ,isModalOpen: false
     }
+  }
+
+  componentDidMount() {
+
   }
 
   render() {
