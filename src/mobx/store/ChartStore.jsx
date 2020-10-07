@@ -13,10 +13,33 @@ class ChartStore {
     }
 
     @action
-    doBubbleChartDataPullingWithMakeChart(chart, chartKey) {
-        const chartData = bubblechartRepository.bubblechartData;
+    doBubbleChartDataPullingWithMakeChart(chart, chartKey, chartType) {
+        // 데이터 획득구간을 key에 따라 다를수있으므로 분기처리 고려해야 함
+        var chartData = {};
+        switch(chartType) {
+            case 'bubble':
+                chartData = bubblechartRepository.bubblechartData;
+                break;
+            case 'follow':
+                chartData = bubblechartRepository.followLineData;
+                break;
+            case 'rectangle':
+                chartData = bubblechartRepository.rectangleLineData;
+                break;
+        }
+
         chart.setDataInsert(chartData);
-        this.bubbleChartStore[chartKey] = chart;
+        var chartByKey = this.bubbleChartStore[chartKey];
+        if(!chartByKey) {
+            console.error("반드시 형상을 먼저 만들고 셋팅해야 합니다.");
+        }else {
+            chartByKey.doAddDatasets(chart);
+            this.bubbleChartStore[chartKey] = chartByKey;
+        }
+    }
+    @action
+    doBubbleChartSettingWithShape(chartShape, chartKey) {
+        this.bubbleChartStore[chartKey] = chartShape;
     }
 
     @action

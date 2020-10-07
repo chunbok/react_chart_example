@@ -94,20 +94,12 @@ class CanvasBaseBubbleChart extends React.Component {
 
     constructor(props) {
         super(props);
-        console.log("버블차트 생성자");
-        this.state = {
-            bubbleChart : props.root.chart.getBubbleChartByKey(props.storeKey)
-        }
-    }
-    
-    componentDidMount() {
-        console.log("버블차트 마운트 전");
-        this.bubbleChart = this.props.root.chart.getBubbleChartByKey(this.props.storeKey);
+        const bubbleChart = props.root.chart.getBubbleChartByKey(props.storeKey);
         const {
             chartFontSize, chartTitle, xAxesName, yAxesName
             , minXAxes, maxXAxes, minYAxes, maxYAxes
             ,...bubblechart} 
-        = this.bubbleChart;
+        = bubbleChart
         this.state ={
             plugins: [
                 {
@@ -213,7 +205,8 @@ class CanvasBaseBubbleChart extends React.Component {
                         alert(alertText.join(""));
                     }
                 }
-            }
+            },
+            bubbleChart : props.root.chart.getBubbleChartByKey(props.storeKey)
         }
 
         if(minXAxes) {
@@ -239,11 +232,15 @@ class CanvasBaseBubbleChart extends React.Component {
         }
     }
     
+    componentDidMount() {
+        
+    }
+    
 
     
 
     render() {
-        const {chartWidth, chartHeight, ...bubbleChart} = this.bubbleChart;
+        const {chartWidth, chartHeight, ...bubbleChart} = this.state.bubbleChart;
         return (
             <div>
                 <button onClick={this.exportImage}>버블차트 저장</button>
@@ -256,7 +253,7 @@ class CanvasBaseBubbleChart extends React.Component {
                         ref={ref => {
                             this.state.bubbleChartThis = ref;
                         }}
-                        data={this.props.data}
+                        data={this.state.bubbleChart}
                         options={this.state.options} plugins={this.state.plugins} />
                     <Modal 
                         openFlag={this.state.isModalOpen}
