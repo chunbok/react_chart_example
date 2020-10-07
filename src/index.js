@@ -1,8 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {MainFrame} from './mainFrame'
+import RootStore from './mobx/RootStore'
+import {Provider} from 'mobx-react';
+
+const root = new RootStore();
 
 class Main extends React.Component {
+
 
   render() {
     return (
@@ -14,6 +19,9 @@ class Main extends React.Component {
 };
 
 ReactDOM.render(
-  <Main />,
+  <Provider root={root}>
+    <Main />
+  </Provider>
+  ,
   document.getElementById('app')
 );

@@ -5,6 +5,12 @@
     ],
     "plugins": [
         [
+          "@babel/plugin-proposal-decorators", // 데코레이션을 쓰기위한 선언
+          {
+            "legacy" : true
+          }
+        ],
+        [
           "@babel/plugin-proposal-class-properties",
           {
             "loose": true

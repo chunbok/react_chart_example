@@ -3,8 +3,9 @@ import ReactDOM from 'react-dom';
 import ImageBaseBubbleChart from './bubble/imageBaseBubble';
 import CanvasBaseBubbleChart from './bubble/canvasBaseBubble';
 import WrappingBoxPlotChart from './boxplot/wrappingBoxplot';
-import BoxplotChart from  './boxplot/boxplot';
-import Modal from './modal/modal';
+import { inject, observer } from 'mobx-react';
+import { autobind } from 'core-decorators';
+import {BubbleChart} from './typeDefined/DefinedTypes'
 
 const chartData = (state) => {
   var returnData = {datasets:[]}
@@ -362,7 +363,19 @@ const boxplotData = [
   }
 ];
 
+@inject('root')
+@observer
+@autobind
 class MainFrame extends React.Component {
+
+  componentDidMount() {
+    this.bubbleChart = new BubbleChart("분포통계", "#000000", "#000000", "Bubble", 1);
+    this.bubbleChart.setChartOptionalData("Bubble Chart(to Canvas)", 290, 180, 8);
+    this.bubbleChart.xAxesName = "싸이클";
+    this.bubbleChart.yAxesName = "값";
+    const chartKey = "canvas"
+    this.props.root.chart.doBubbleChartDataPullingWithMakeChart(this.bubbleChart, chartKey);
+  }
 
   exportImage = () => {
     var element = document.createElement("a");
@@ -476,8 +489,8 @@ class MainFrame extends React.Component {
             backgroundColor: '#DF8D80',
             borderColor: '#DD604B',
             borderWidth: 1,
-            padding: 10,
-            itemRadius: 0,
+            // padding: 7,
+            // itemRadius: 5,
             data: boxplotData
         }]
       }
@@ -488,16 +501,8 @@ class MainFrame extends React.Component {
   render() {
     return (
       <div>
-        <CanvasBaseBubbleChart 
-          chartTitle="Bubble Chart(to Canvas)"
-          chartWidth="290" chartHeight="180"
-          chartFontSize="8"
-          //minXAxes="0" maxXAxes="200"
-          minYAxes="-100" maxYAxes="1000"
-          xAxesName="싸이클" yAxesName="값"
-          data={chartData(this.state)}
-        />
-        <CanvasBaseBubbleChart 
+        <CanvasBaseBubbleChart storeKey="canvas" />
+        {/* <CanvasBaseBubbleChart 
           chartTitle="Bubble Chart(to Image)"
           chartWidth="1000" chartHeight="500"
           chartFontSize="15"
@@ -505,7 +510,7 @@ class MainFrame extends React.Component {
           // minYAxes="-40" maxYAxes="1000"
           xAxesName="싸이클" yAxesName="값"
           data={chartData(this.state)}
-        />
+        /> */}
         <WrappingBoxPlotChart
           chartTitle="BoxPlot Chart"
           chartWidth="1000" chartHeight="500"

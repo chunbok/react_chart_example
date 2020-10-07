@@ -29,17 +29,21 @@ module.exports = {
               // Compiles Sass to CSS
               'sass-loader',
             ],
+          },
+          { 
+            test: /\.tsx?$/
+            , loader: "ts-loader" 
           }
       ]
   }
   , resolve: {
-    extensions: ['.js', '.jsx']
+    extensions: ['.js', '.jsx', '.ts', '.tsx']
   } // webpack이 확장자 없이 해석할수 있도록 확장자 등록
   ,plugins: [
     new HtmlWebpackPlugin(
         {template: path.join(__dirname, 'src/index.html')}
-    ),
-    new CleanWebpackPlugin()
+    ), // 메인 HTML을 묶어줌
+    new CleanWebpackPlugin() // 배포시마다 기존 파일 삭제(클린업)
   ],
   optimization: {
     moduleIds: 'hashed',

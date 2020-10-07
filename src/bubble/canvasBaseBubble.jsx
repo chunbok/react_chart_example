@@ -1,6 +1,8 @@
 import React from 'react';
 import {Bubble} from 'react-chartjs-2';
 import Modal from '../modal/modal';
+import {inject, observer} from 'mobx-react';
+import {autobind} from 'core-decorators';
 
 const doCalcNextLine = (textInfo) => {
     textInfo.fontPositionY = textInfo.fontPositionY + (textInfo.fontPixel);
@@ -14,7 +16,11 @@ const fillTextAddLine = (ctx, textInfo) => {
     ctx.fillText(textInfo.fillText, textInfo.fontPositionX, textInfo.fontPositionY);
 }
 
+@inject("root")
+@observer // mobx observable state 를 rerendring 하기위에 선언해준다
+@autobind // arrow function 없이 this를 자동으로 바인딩 시켜준다.
 class CanvasBaseBubbleChart extends React.Component {
+
 
     exportImage = () => {
         var element = document.createElement("a");
@@ -87,7 +93,21 @@ class CanvasBaseBubbleChart extends React.Component {
     }
 
     constructor(props) {
-        super();
+        super(props);
+        console.log("버블차트 생성자");
+        this.state = {
+            bubbleChart : props.root.chart.getBubbleChartByKey(props.storeKey)
+        }
+    }
+    
+    componentDidMount() {
+        console.log("버블차트 마운트 전");
+        this.bubbleChart = this.props.root.chart.getBubbleChartByKey(this.props.storeKey);
+        const {
+            chartFontSize, chartTitle, xAxesName, yAxesName
+            , minXAxes, maxXAxes, minYAxes, maxYAxes
+            ,...bubblechart} 
+        = this.bubbleChart;
         this.state ={
             plugins: [
                 {
@@ -99,7 +119,7 @@ class CanvasBaseBubbleChart extends React.Component {
                         var textInfo = {};
                         textInfo.fontPositionX = chartArea.left;
                         textInfo.fontPositionY = chartArea.top;
-                        textInfo.fontPixel = props.chartFontSize/1; //넘어온값이 String이므로 강제로 numberic으로 변경
+                        textInfo.fontPixel = chartFontSize; 
                         textInfo.fontStyle = "Georgia";
                         textInfo.fontColor = "black";
                         textInfo.fillText = "1번째 줄 채우기";
@@ -115,7 +135,7 @@ class CanvasBaseBubbleChart extends React.Component {
             options: {
                 title: {
                     display: false,
-                    text: props.chartTitle,
+                    text: chartTitle,
                     fontSize: 20
                 },
                 legend: {
@@ -134,10 +154,10 @@ class CanvasBaseBubbleChart extends React.Component {
                         label: (tooltipItem, data) =>{
                             var labelString = [];
                             labelString.push(
-                                this.props.xAxesName +  " : ",
+                                xAxesName +  " : ",
                                 tooltipItem.xLabel,
                                 ", ",
-                                this.props.yAxesName + " : ",
+                                yAxesName + " : ",
                                 tooltipItem.yLabel
                             );
                             return labelString.join("");
@@ -148,7 +168,7 @@ class CanvasBaseBubbleChart extends React.Component {
                     xAxes: [{
                         scaleLabel: {
                             display: true,
-                            labelString: props.xAxesName
+                            labelString: xAxesName
                         },
                         display: true,
                         afterTickToLabelConversion: (scale) => {
@@ -163,7 +183,7 @@ class CanvasBaseBubbleChart extends React.Component {
                     yAxes: [{
                         scaleLabel: {
                             display: true,
-                            labelString: props.yAxesName
+                            labelString: yAxesName
                         },
                         display: true,
                         afterTickToLabelConversion: (scale) => {
@@ -184,10 +204,10 @@ class CanvasBaseBubbleChart extends React.Component {
                         var alertText = [];
                         alertText.push(datasetLabel);
                         alertText.push("-> ");
-                        alertText.push(props.xAxesName + ": ");
+                        alertText.push(xAxesName + ": ");
                         alertText.push(data.x);
                         alertText.push(", ");
-                        alertText.push(props.yAxesName + ": ");
+                        alertText.push(yAxesName + ": ");
                         alertText.push(data.y);
             
                         alert(alertText.join(""));
@@ -196,25 +216,25 @@ class CanvasBaseBubbleChart extends React.Component {
             }
         }
 
-        if(props.minXAxes) {
+        if(minXAxes) {
             this.state.options.scales.xAxes[0].ticks = {
-                min: props.minXAxes/1, //넘어온값이 String이므로 강제로 numberic으로 변경,
+                min: minXAxes, //넘어온값이 String이므로 강제로 numberic으로 변경,
             }
         }
-        if(props.maxXAxes) {
+        if(maxXAxes) {
             this.state.options.scales.xAxes[0].ticks = {
-                max: props.maxXAxes/1 //넘어온값이 String이므로 강제로 numberic으로 변경
+                max: maxXAxes //넘어온값이 String이므로 강제로 numberic으로 변경
             }
         }
 
-        if(props.minYAxes) {
+        if(minYAxes) {
             this.state.options.scales.yAxes[0].ticks = {
-                min: props.minYAxes/1, //넘어온값이 String이므로 강제로 numberic으로 변경
+                min: minYAxes, //넘어온값이 String이므로 강제로 numberic으로 변경
             }
         }
-        if(props.maxYAxes) {
+        if(maxYAxes) {
             this.state.options.scales.yAxes[0].ticks = {
-                max: props.maxYAxes/1 //넘어온값이 String이므로 강제로 numberic으로 변경
+                max: maxYAxes //넘어온값이 String이므로 강제로 numberic으로 변경
             }
         }
     }
@@ -223,7 +243,7 @@ class CanvasBaseBubbleChart extends React.Component {
     
 
     render() {
-        const {chartWidth, chartHeight, ...prorps} = this.props;
+        const {chartWidth, chartHeight, ...bubbleChart} = this.bubbleChart;
         return (
             <div>
                 <button onClick={this.exportImage}>버블차트 저장</button>
