@@ -445,15 +445,24 @@ class MainFrame extends React.Component {
 
   constructor(props) {
     super();
-    const chartKey = "canvas"
-    var bubbleChartShape = new BubbleChartShape("Bubble Chart(to Canvas)", 290, 180, 8);
-    bubbleChartShape.xAxesName = "싸이클";
-    bubbleChartShape.yAxesName = "값";
-    props.root.chart.doBubbleChartSettingWithShape(bubbleChartShape, chartKey);
-    var bubbleChart = new BubbleChart("분포통계", "#000000", "#000000", "bubble", 1);
-    props.root.chart.doBubbleChartDataPullingWithMakeChart(bubbleChart, chartKey, 'bubble');
-    var rectangleLine = new RectangleLine("범위 선", "#CAA712", "#CAA712", "scatter", 1, 1);
-    props.root.chart.doBubbleChartDataPullingWithMakeChart(rectangleLine, chartKey, 'rectangle');
+    const chartKeyCanvas = "canvas"
+    var bubbleChartShapeCanvas = new BubbleChartShape("Bubble Chart(to Canvas)", 290, 180, 8);
+    bubbleChartShapeCanvas.xAxesName = "싸이클";
+    bubbleChartShapeCanvas.yAxesName = "값";
+    props.root.chart.doBubbleChartSettingWithShape(bubbleChartShapeCanvas, chartKeyCanvas);
+    var bubbleChartCanvas = new BubbleChart("분포통계", "#000000", "#000000", "bubble", 1);
+    props.root.chart.doBubbleChartDataPullingWithMakeChart(bubbleChartCanvas, chartKeyCanvas, 'bubble');
+    var rectangleLineCanvas = new RectangleLine("범위 선", "#CAA712", "#CAA712", "scatter", 1, 1);
+    props.root.chart.doBubbleChartDataPullingWithMakeChart(rectangleLineCanvas, chartKeyCanvas, 'rectangle');
+    const chartKeyImage = "image"
+    var bubbleChartShapeImage = new BubbleChartShape("Bubble Chart(to image)", 290, 180, 8);
+    bubbleChartShapeImage.xAxesName = "싸이클";
+    bubbleChartShapeImage.yAxesName = "값";
+    props.root.chart.doBubbleChartSettingWithShape(bubbleChartShapeImage, chartKeyImage);
+    var bubbleChartImage = new BubbleChart("분포통계", "#000000", "#000000", "bubble", 1);
+    props.root.chart.doBubbleChartDataPullingWithMakeChart(bubbleChartImage, chartKeyImage, 'bubble');
+    var rectangleLineImage = new RectangleLine("범위 선", "#CAA712", "#CAA712", "scatter", 1, 1);
+    props.root.chart.doBubbleChartDataPullingWithMakeChart(rectangleLineImage, chartKeyImage, 'rectangle');
 
     this.state = {
       bubbleData: [
@@ -553,8 +562,12 @@ class MainFrame extends React.Component {
   render() {
     return (
       <div>
-        <CanvasBaseBubbleChart storeKey="canvas" />
-        <CanvasBaseBubbleChart storeKey="canvas" />
+        <CanvasBaseBubbleChart storeKey="canvas" doCollectChartImage={this.doCollectChartImage} />
+        <CanvasBaseBubbleChart storeKey="image" doCollectChartImage={this.doCollectChartImage} />
+        <div style={{padding: "20px 0px 20px 0px"}}>
+          <button onClick={this.doClickDownload}>모두 다운(따로)</button>
+          <button onClick={this.doClickDownloadAboutZip}>모두 다운(압축)</button>
+        </div>
         <WrappingBoxPlotChart
           chartTitle="BoxPlot Chart"
           chartWidth="1000" chartHeight="500"
