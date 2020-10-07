@@ -3,9 +3,15 @@ import ReactDOM from 'react-dom';
 import ImageBaseBubbleChart from './bubble/imageBaseBubble';
 import CanvasBaseBubbleChart from './bubble/canvasBaseBubble';
 import WrappingBoxPlotChart from './boxplot/wrappingBoxplot';
+<<<<<<< HEAD
 import { inject, observer } from 'mobx-react';
 import { autobind } from 'core-decorators';
 import {BubbleChart, BubbleChartShape, RectangleLine} from './typeDefined/DefinedTypes'
+=======
+import BoxplotChart from  './boxplot/boxplot';
+import Modal from './modal/modal';
+import JSZip from 'jszip';
+>>>>>>> master
 
 const chartData = (state) => {
   var returnData = {datasets:[]}
@@ -377,13 +383,54 @@ class MainFrame extends React.Component {
   //   this.props.root.chart.doBubbleChartDataPullingWithMakeChart(this.bubbleChart, chartKey);
   // }
 
-  exportImage = () => {
+  exportImage = (chartImage, chartTitle) => {
     var element = document.createElement("a");
-    element.href = this.state.bubbleChartImage;
-    element.download = "image.jpg";
+    element.href = chartImage;
+    element.download = chartTitle;
     element.click();
     element.remove();
   };
+
+  doClickDownload = () => {
+    for(const[key, item] of Object.entries(this.state.chartItems)) {
+      this.exportImage(item, key);
+    }
+  }
+  
+  doClickDownloadAboutZip = () => {
+    var zip = new JSZip();
+    for(const[key, item] of Object.entries(this.state.chartItems)) {
+      zip.file(
+        key + item.substring(item.indexOf("/") , item.indexOf(";")).replace("/", ".")
+      , item);
+    }
+    zip.generateAsync({ type: "blob", }).then(function(contents) {
+      var element = document.createElement("a");
+      element.href = URL.createObjectURL(contents);
+      element.download = "test.zip";
+      element.click();
+      element.remove();
+    });
+
+
+  }
+
+  doCollectChartImage = (chartImage, chartTitle) => {
+    var chartItems = this.state.chartItems;
+    if(!chartItems) {
+      var chartItem = {};
+      chartItem[chartTitle] = chartImage;
+      this.setState({
+        chartItems: chartItem
+      });
+    }else {
+      chartItems[chartTitle] = chartImage;
+      this.setState({
+        chartItems: chartItems
+      });
+    }
+
+  }
 
   setImage = (chartImage) => {
     this.setState({
