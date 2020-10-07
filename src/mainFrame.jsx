@@ -3,15 +3,10 @@ import ReactDOM from 'react-dom';
 import ImageBaseBubbleChart from './bubble/imageBaseBubble';
 import CanvasBaseBubbleChart from './bubble/canvasBaseBubble';
 import WrappingBoxPlotChart from './boxplot/wrappingBoxplot';
-<<<<<<< HEAD
 import { inject, observer } from 'mobx-react';
 import { autobind } from 'core-decorators';
 import {BubbleChart, BubbleChartShape, RectangleLine} from './typeDefined/DefinedTypes'
-=======
-import BoxplotChart from  './boxplot/boxplot';
-import Modal from './modal/modal';
 import JSZip from 'jszip';
->>>>>>> master
 
 const chartData = (state) => {
   var returnData = {datasets:[]}
