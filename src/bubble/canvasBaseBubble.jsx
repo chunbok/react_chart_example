@@ -109,6 +109,7 @@ class CanvasBaseBubbleChart extends React.Component {
                         textInfo.fillText = "2번째 줄 채우기";            
                         fillTextAddLine(ctx, textInfo);
                         this.setImage(chartInstance.toBase64Image());
+                        this.props.doCollectChartImage(chartInstance.toBase64Image(), this.props.chartTitle);
                     }
                 }
             ],

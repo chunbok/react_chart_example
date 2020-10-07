@@ -5,6 +5,7 @@ import CanvasBaseBubbleChart from './bubble/canvasBaseBubble';
 import WrappingBoxPlotChart from './boxplot/wrappingBoxplot';
 import BoxplotChart from  './boxplot/boxplot';
 import Modal from './modal/modal';
+import JSZip from 'jszip';
 
 const chartData = (state) => {
   var returnData = {datasets:[]}
@@ -364,13 +365,55 @@ const boxplotData = [
 
 class MainFrame extends React.Component {
 
-  exportImage = () => {
+
+  exportImage = (chartImage, chartTitle) => {
     var element = document.createElement("a");
-    element.href = this.state.bubbleChartImage;
-    element.download = "image.jpg";
+    element.href = chartImage;
+    element.download = chartTitle;
     element.click();
     element.remove();
   };
+
+  doClickDownload = () => {
+    for(const[key, item] of Object.entries(this.state.chartItems)) {
+      this.exportImage(item, key);
+    }
+  }
+  
+  doClickDownloadAboutZip = () => {
+    var zip = new JSZip();
+    for(const[key, item] of Object.entries(this.state.chartItems)) {
+      zip.file(
+        key + item.substring(item.indexOf("/") , item.indexOf(";")).replace("/", ".")
+      , item);
+    }
+    zip.generateAsync({ type: "blob", }).then(function(contents) {
+      var element = document.createElement("a");
+      element.href = URL.createObjectURL(contents);
+      element.download = "test.zip";
+      element.click();
+      element.remove();
+    });
+
+
+  }
+
+  doCollectChartImage = (chartImage, chartTitle) => {
+    var chartItems = this.state.chartItems;
+    if(!chartItems) {
+      var chartItem = {};
+      chartItem[chartTitle] = chartImage;
+      this.setState({
+        chartItems: chartItem
+      });
+    }else {
+      chartItems[chartTitle] = chartImage;
+      this.setState({
+        chartItems: chartItems
+      });
+    }
+
+  }
 
   setImage = (chartImage) => {
     this.setState({
@@ -496,16 +539,22 @@ class MainFrame extends React.Component {
           minYAxes="-100" maxYAxes="1000"
           xAxesName="싸이클" yAxesName="값"
           data={chartData(this.state)}
-        />
+          doCollectChartImage={this.doCollectChartImage}
+          />
         <CanvasBaseBubbleChart 
           chartTitle="Bubble Chart(to Image)"
           chartWidth="1000" chartHeight="500"
           chartFontSize="15"
-        //   minXAxes="0" maxXAxes="200"
+          //   minXAxes="0" maxXAxes="200"
           // minYAxes="-40" maxYAxes="1000"
           xAxesName="싸이클" yAxesName="값"
           data={chartData(this.state)}
+          doCollectChartImage={this.doCollectChartImage}
         />
+        <div style={{padding : "20px 0px 20px 0px"}}>
+          <button onClick={this.doClickDownload}>모두 다운로드</button>
+          <button onClick={this.doClickDownloadAboutZip}>모두 다운로드(압축)</button>
+        </div>
         <WrappingBoxPlotChart
           chartTitle="BoxPlot Chart"
           chartWidth="1000" chartHeight="500"
