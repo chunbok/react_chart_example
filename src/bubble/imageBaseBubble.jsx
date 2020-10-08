@@ -1,6 +1,8 @@
 import React from 'react';
 import {Bubble} from 'react-chartjs-2';
 import Modal from '../modal/modal';
+import {inject, observer} from 'mobx-react';
+import {autobind} from 'core-decorators';
 
 const doCalcNextLine = (textInfo) => {
     textInfo.fontPositionY = textInfo.fontPositionY + (textInfo.fontPixel);
@@ -14,6 +16,10 @@ const fillTextAddLine = (ctx, textInfo) => {
     ctx.fillText(textInfo.fillText, textInfo.fontPositionX, textInfo.fontPositionY);
 }
 
+
+@inject("root")
+@observer // mobx observable state 를 rerendring 하기위에 선언해준다
+@autobind // arrow function 없이 this를 자동으로 바인딩 시켜준다.
 class BubbleChart extends React.Component {
 
     exportImage = () => {
@@ -40,17 +46,25 @@ class BubbleChart extends React.Component {
 
     constructor(props) {
         super();
+        super(props);
+        const bubbleChart = props.root.chart.getBubbleChartByKey(props.storeKey);
+        const {
+            chartFontSize, chartTitle, xAxesName, yAxesName
+            , minXAxes, maxXAxes, minYAxes, maxYAxes
+            ,...bubblechart} 
+        = bubbleChart
+        
         this.state ={
             plugins: [
                 {
-                    afterRender: (chartInstance, easing) => {
+                    afterDraw: (chartInstance, easing) => {
                         // 현재 차트 컨텍스트 획득
                         const ctx = chartInstance.chart.ctx;
             
                         var textInfo = {};
                         textInfo.fontPositionX = props.chartWidth/7;
                         textInfo.fontPositionY = props.chartHeight/10;
-                        textInfo.fontPixel = props.chartFontSize/1; //넘어온값이 String이므로 강제로 numberic으로 변경
+                        textInfo.fontPixel = chartFontSize; //넘어온값이 String이므로 강제로 numberic으로 변경
                         textInfo.fontStyle = "Georgia";
                         textInfo.fontColor = "black";
                         textInfo.fillText = "1번째 줄 채우기";
@@ -59,14 +73,19 @@ class BubbleChart extends React.Component {
                         doCalcNextLine(textInfo);
                         textInfo.fillText = "2번째 줄 채우기";            
                         fillTextAddLine(ctx, textInfo);
-                        this.setImage(chartInstance.toBase64Image());
+                        if(easing == 1) {
+                            // easing 1 은 렌더링이 모두 끝난시점을 획득하는것
+                            const image = chartInstance.toBase64Image();
+                            this.setImage(image);
+                            this.props.doCollectChartImage(image, chartTitle);
+                        }
                     }
                 }
             ],
             options: {
                 title: {
                     display: true,
-                    text: props.chartTitle,
+                    text: chartTitle,
                     fontSize: 20
                 },
                 legend: {
@@ -79,10 +98,10 @@ class BubbleChart extends React.Component {
                         label: (tooltipItem, data) =>{
                             var labelString = [];
                             labelString.push(
-                                this.props.xAxesName +  " : ",
+                                xAxesName +  " : ",
                                 tooltipItem.xLabel,
                                 ", ",
-                                this.props.yAxesName + " : ",
+                                yAxesName + " : ",
                                 tooltipItem.yLabel
                             );
                             return labelString.join("");
@@ -93,14 +112,14 @@ class BubbleChart extends React.Component {
                     xAxes: [{
                         scaleLabel: {
                             display: true,
-                            labelString: props.xAxesName
+                            labelString: xAxesName
                         },
                         display: true
                     }],
                     yAxes: [{
                         scaleLabel: {
                             display: true,
-                            labelString: props.yAxesName
+                            labelString: yAxesName
                         },
                         display: true
                     }] 
@@ -113,37 +132,38 @@ class BubbleChart extends React.Component {
                         var alertText = [];
                         alertText.push(datasetLabel);
                         alertText.push("-> ");
-                        alertText.push(props.xAxesName + ": ");
+                        alertText.push(xAxesName + ": ");
                         alertText.push(data.x);
                         alertText.push(", ");
-                        alertText.push(props.yAxesName + ": ");
+                        alertText.push(yAxesName + ": ");
                         alertText.push(data.y);
             
                         alert(alertText.join(""));
                     }
                 }
+            },
+            bubbleChart : props.root.chart.getBubbleChartByKey(props.storeKey)
+        }
+
+        if(minXAxes) {
+            this.state.options.scales.xAxes[0].ticks = {
+                min: minXAxes
+            }
+        }
+        if(maxXAxes) {
+            this.state.options.scales.xAxes[0].ticks = {
+                max: maxXAxes 
             }
         }
 
-        if(props.minXAxes) {
-            this.state.options.scales.xAxes[0].ticks = {
-                min: props.minXAxes/1, //넘어온값이 String이므로 강제로 numberic으로 변경,
-            }
-        }
-        if(props.maxXAxes) {
-            this.state.options.scales.xAxes[0].ticks = {
-                max: props.maxXAxes/1 //넘어온값이 String이므로 강제로 numberic으로 변경
-            }
-        }
-
-        if(props.minYAxes) {
+        if(minYAxes) {
             this.state.options.scales.yAxes[0].ticks = {
-                min: props.minYAxes/1, //넘어온값이 String이므로 강제로 numberic으로 변경
+                min: minYAxes
             }
         }
-        if(props.maxYAxes) {
+        if(maxYAxes) {
             this.state.options.scales.yAxes[0].ticks = {
-                max: props.maxYAxes/1 //넘어온값이 String이므로 강제로 numberic으로 변경
+                max: maxYAxes //넘어온값이 String이므로 강제로 numberic으로 변경
             }
         }
     }
@@ -152,7 +172,7 @@ class BubbleChart extends React.Component {
     
 
     render() {
-        const {chartWidth, chartHeight, ...prorps} = this.props;
+        const {chartWidth, chartHeight, ...prorps} = this.state.bubbleChart;
         return (
             <div>
                 <button onClick={this.exportImage}>버블차트 저장</button>
@@ -163,7 +183,7 @@ class BubbleChart extends React.Component {
                 }}>
                     {
                         this.state.bubbleChartImage == null?
-                        <Bubble data={this.props.data}
+                        <Bubble data={this.state.bubbleChart}
                         options={this.state.options} plugins={this.state.plugins} />
                         :
                         <img style={{

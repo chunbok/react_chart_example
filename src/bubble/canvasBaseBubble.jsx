@@ -3,6 +3,7 @@ import {Bubble} from 'react-chartjs-2';
 import Modal from '../modal/modal';
 import {inject, observer} from 'mobx-react';
 import {autobind} from 'core-decorators';
+import {FollowLine} from '../typeDefined/DefinedTypes'
 
 const doCalcNextLine = (textInfo) => {
     textInfo.fontPositionY = textInfo.fontPositionY + (textInfo.fontPixel);
@@ -20,7 +21,6 @@ const fillTextAddLine = (ctx, textInfo) => {
 @observer // mobx observable state 를 rerendring 하기위에 선언해준다
 @autobind // arrow function 없이 this를 자동으로 바인딩 시켜준다.
 class CanvasBaseBubbleChart extends React.Component {
-
 
     exportImage = () => {
         var element = document.createElement("a");
@@ -92,6 +92,21 @@ class CanvasBaseBubbleChart extends React.Component {
             false: true;
     }
 
+    doMakeFollowLine() {
+        const chartKeyCanvas = 'canvas';
+        var index = 0;
+        if(this.state.followIndex) {
+            index = this.state.followIndex;
+        }
+
+        var followLineImage = new FollowLine("추적 선" +  index, "#9F999A", "#9F999A", "scatter", 1, 1);
+        this.props.root.chart.doBubbleChartDataPullingWithMakeChart(followLineImage, chartKeyCanvas, 'follow', index);
+        this.setState({
+            followIndex: index + 1
+        });
+        // this.state.bubbleChartThis.chartInstance.update();
+    }
+
     constructor(props) {
         super(props);
         const bubbleChart = props.root.chart.getBubbleChartByKey(props.storeKey);
@@ -120,8 +135,11 @@ class CanvasBaseBubbleChart extends React.Component {
                         doCalcNextLine(textInfo);
                         textInfo.fillText = "2번째 줄 채우기";            
                         fillTextAddLine(ctx, textInfo);
-                        this.setImage(chartInstance.toBase64Image());
-                        this.props.doCollectChartImage(chartInstance.toBase64Image(), chartTitle);
+                        if(easing == 1) {
+                            // easing 1 은 렌더링이 모두 끝난시점을 획득하는것
+                            this.setImage(chartInstance.toBase64Image());
+                            this.props.doCollectChartImage(chartInstance.toBase64Image(), chartTitle);
+                        }
                     }
                 }
             ],
@@ -232,13 +250,6 @@ class CanvasBaseBubbleChart extends React.Component {
             }
         }
     }
-    
-    componentDidMount() {
-        
-    }
-    
-
-    
 
     render() {
         const {chartWidth, chartHeight, ...bubbleChart} = this.state.bubbleChart;
@@ -263,9 +274,12 @@ class CanvasBaseBubbleChart extends React.Component {
                         setImage={this.setImage} 
                     />
                 </div>
-                <button onClick={this.hideLineAll}>모든선토글</button>
-                <button onClick={this.hideLineEndPoint}>끝선토글</button>
-                <button onClick={this.hideLineMiddle}>중간선토글</button>
+                <div style={{padding: "20px 0px 20px 0px"}}>
+                    <button onClick={this.doMakeFollowLine}>그래프 추적선 추가</button>
+                    <button onClick={this.hideLineAll}>모든선토글</button>
+                    <button onClick={this.hideLineEndPoint}>끝선토글</button>
+                    <button onClick={this.hideLineMiddle}>중간선토글</button>
+                </div>
         </div>
         );
     }

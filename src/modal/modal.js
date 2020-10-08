@@ -26,12 +26,6 @@ class Modal extends React.Component {
         super();
     }
 
-    componentDidUpdate = () => {
-      // if(this.imageEditor) {
-      //   removeHeader();
-      // }
-    }
-
     render() {
         return (
           <React.Fragment>{

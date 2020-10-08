@@ -75,16 +75,29 @@ class BubbleChart extends ChartDefault {
 class RectangleLine extends ChartDefault {
     showLine: boolean = true; // 선보이기 여부
     borderWidth: Number; // 선두께
-
+    
     lineTension?: Number = 0;
-
+    
     constructor(label: String, backgroundColor: String, borderColor: String
         , type: "bubble" | "scatter" | "boxplot", borderWidth: Number,
         radius?: Number, showLine?: boolean, lineTension?: Number) {
-        super(label, backgroundColor, borderColor, type, radius);
-        this.borderWidth = borderWidth;
-        if(showLine) {this.showLine = showLine}
-        if(lineTension) {this.lineTension = lineTension}
+            super(label, backgroundColor, borderColor, type, radius);
+            this.borderWidth = borderWidth;
+            if(showLine) {this.showLine = showLine}
+            if(lineTension) {this.lineTension = lineTension}
+        }
+    }
+    
+class FollowLine extends ChartDefault {
+    showLine: boolean = true; // 선보이기 여부
+    borderWidth: Number; // 선두께
+    
+    constructor(label: String, backgroundColor: String, borderColor: String
+        , type: "bubble" | "scatter" | "boxplot", borderWidth: Number,
+        radius?: Number, showLine?: boolean, lineTension?: Number) {
+            super(label, backgroundColor, borderColor, type, radius);
+            this.borderWidth = borderWidth;
+            if(showLine) {this.showLine = showLine}
     }
 }
 
@@ -120,4 +133,4 @@ class CoordinateData {
     }
 }
 
-export {BubbleChartShape, BubbleChart, CoordinateData, RectangleLine}
+export {BubbleChartShape, BubbleChart, CoordinateData, RectangleLine, FollowLine}

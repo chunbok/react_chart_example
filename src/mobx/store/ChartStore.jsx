@@ -13,7 +13,7 @@ class ChartStore {
     }
 
     @action
-    doBubbleChartDataPullingWithMakeChart(chart, chartKey, chartType) {
+    doBubbleChartDataPullingWithMakeChart(chart, chartKey, chartType, index/* follow 차트만 씀 */) {
         // 데이터 획득구간을 key에 따라 다를수있으므로 분기처리 고려해야 함
         var chartData = {};
         switch(chartType) {
@@ -21,7 +21,7 @@ class ChartStore {
                 chartData = bubblechartRepository.bubblechartData;
                 break;
             case 'follow':
-                chartData = bubblechartRepository.followLineData;
+                chartData = bubblechartRepository.followLineData(index);
                 break;
             case 'rectangle':
                 chartData = bubblechartRepository.rectangleLineData;
