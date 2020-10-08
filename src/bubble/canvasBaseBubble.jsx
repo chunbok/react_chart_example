@@ -40,7 +40,7 @@ class CanvasBaseBubbleChart extends React.Component {
 
     hideLineAll = () => {
         var chartThis = this.state.bubbleChartThis.chartInstance;
-        const datas =this.props.data.datasets.filter(item => {
+        const datas =chartThis.data.datasets.filter(item => {
             if(item.type == 'scatter' && item.lineTension != 0) {
                 return item;
             }
@@ -53,7 +53,7 @@ class CanvasBaseBubbleChart extends React.Component {
 
     hideLineEndPoint = () => {
         var chartThis = this.state.bubbleChartThis.chartInstance;
-        const datas =this.props.data.datasets.filter(item => {
+        const datas =chartThis.data.datasets.filter(item => {
             if(item.type == 'scatter' && item.lineTension != 0) {
                 return item;
             }
@@ -68,7 +68,7 @@ class CanvasBaseBubbleChart extends React.Component {
 
     hideLineMiddle = () => {
         var chartThis = this.state.bubbleChartThis.chartInstance;
-        const datas =this.props.data.datasets.filter(item => {
+        const datas =chartThis.data.datasets.filter(item => {
             if(item.type == 'scatter' && item.lineTension != 0) {
                 return item;
             }
